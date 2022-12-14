@@ -1,0 +1,31 @@
+
+file = open("data.txt", "r")
+wholeList = file.readlines()
+file.close()
+out = open("New folder/new.txt", "w")
+height = 2.92
+units = ['Kg', 's', 'N', 'J', 'W', 'hp']
+avg = 0
+myList = []
+for i in range(len(wholeList)):
+    myList.append((wholeList[i].strip()).split(","))
+for i in range(len(myList)):
+    for j in range(len(myList[i])):
+        myList[i][j] = float(myList[i][j])
+    myList[i].append(myList[i][0]*9.81) # Force of gravity (N)
+    myList[i].append(myList[i][2]*height) # Work (J)
+    myList[i].append(myList[i][3]/myList[i][1]) # Power (W)
+    myList[i].append(myList[i][4]/746) # Horespower (hp
+    avg += myList[i][-1] # Avg
+
+mass_avg, count = 0, 0
+for i in range(len(myList)):
+        for j in range(len(myList[i])):
+            if myList[i][-1] >= 1:
+                out.write(f"{myList[i][j]:.2f}{units[j]}\t |\t")
+                mass_avg+=myList[i][0]
+                count+=1
+        out.write("\n")
+out.write(f" Mass Avg: {mass_avg/count:.2f}\n")
+out.write(f" Average horsepower: {avg/len(myList):.2f} hp")
+out.close()
